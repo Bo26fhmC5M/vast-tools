@@ -1,5 +1,5 @@
 # vast-tools
-Yet another useful tool for vastai hosts.
+Yet another useful tools for vastai hosts.
 
 # Fix for nvml error when using Ubuntu 22
 Hosts often make mistakes when applying nvml fixes manually. This fix automatically resolves nvml error without any worries.
