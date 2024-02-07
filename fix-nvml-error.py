@@ -28,6 +28,6 @@ with json_path.open('w', encoding='utf-8') as f:
     json.dump(json_dict, f, indent=4, sort_keys=True)
 
 if subprocess.run(['sudo', 'systemctl', 'restart', 'docker'], check=True, stdout=subprocess.PIPE).returncode == 0:
-	print("Docker service has been restarted.")
+    print("Docker service has been restarted.")
 
 print("Complete. Run vastai install script again.")
