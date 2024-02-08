@@ -1,7 +1,7 @@
 # vast-tools
 Yet another useful tools for vastai hosts.
 
-# Fix for nvml error when using Ubuntu 22
+# Fix for nvml error when using Ubuntu 22,24
 Hosts often make mistakes when applying nvml fixes manually. This fix automatically resolves nvml error without any worries.
 ```
 wget -O fix-nvml-error.py https://raw.githubusercontent.com/Bo26fhmC5M/vast-tools/main/fix-nvml-error.py
