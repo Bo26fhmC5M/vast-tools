@@ -3,9 +3,6 @@
 # setup-gpufan-controller.sh install
 # setup-gpufan-controller.sh uninstall
 
-BASEDIR="$(dirname "$0")"
-
-
 if [[ "${1,,}" == "install" ]]; then
 sudo curl -o /usr/local/sbin/set_fan_curve https://github.com/jjziets/GPU_FAN_OC_Manager/raw/main/set_fan_curve
 sudo chmod +x /usr/local/sbin/set_fan_curve
