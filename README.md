@@ -28,3 +28,10 @@ If you want to free up the storage used by vastai, but are reluctant to remove a
 wget https://raw.githubusercontent.com/Bo26fhmC5M/vast-tools/main/clean-vastai-storage.sh
 sudo bash clean-vastai-storage.sh
 ```
+
+# How to check if port range is open
+For Linux beginners, using the 'nc' command to test port range can be challenging. This script provides a simple way to check if port range is open.
+```
+wget https://github.com/Bo26fhmC5M/vast-tools/blob/main/test-ports.py
+python3 test-ports.py
+```
