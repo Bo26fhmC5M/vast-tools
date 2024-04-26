@@ -164,5 +164,5 @@ for port in [start, picked, end]:
     time.sleep(3)
 
 if not is_closed:
-    print("Now, you can safely run following command:")
+    print("Now, you can safely run following command if this machine is idle:")
     print(f"sudo bash -c 'echo \"{start}-{end}\" > /var/lib/vastai_kaalia/host_port_range'")
