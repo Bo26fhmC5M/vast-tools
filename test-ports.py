@@ -55,6 +55,7 @@ def test_tcp_port(ip, port):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.settimeout(10)
         try:
             sock.bind(('0.0.0.0', int(port)))
         except OSError:
