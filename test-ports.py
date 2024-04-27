@@ -86,7 +86,7 @@ def test_tcp_port(ip, port):
         try:
             future.result(timeout=10)
             return True
-        except concurrent.futures.TimeoutError:
+        except (concurrent.futures.TimeoutError, socket.timeout):
             return False
         finally:
             sock.close()
