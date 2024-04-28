@@ -60,6 +60,7 @@ def test_tcp_port(ip, port):
             sock.bind(('0.0.0.0', int(port)))
         except OSError:
             print(f"Port {port} is already listening.")
+            print(f"If docker is mapping port {port} but your client isn't actually using that port, then the port cannot be tested, and the port can only be tested after the client deletes the instance.")
             return False
         sock.listen()
 
