@@ -171,3 +171,5 @@ for port in [start, picked, end]:
 if not is_closed:
     print("Now, you can safely run following command if this machine is idle:")
     print(f"sudo bash -c 'echo \"{start}-{end}\" > /var/lib/vastai_kaalia/host_port_range'")
+else:
+    print("CLOSED indicates that either port forwarding is configured incorrectly when using a router, or this machine's firewall is blocking access to the port.")
