@@ -60,7 +60,6 @@ def test_tcp_port(ip, port):
             sock.bind(('0.0.0.0', int(port)))
         except OSError:
             print(f"Port {port} is already listening.")
-            print(f"If docker is mapping port {port} but your client isn't actually using that port, then the port cannot be tested, and the port can only be tested after the client deletes the instance.")
             return False
         sock.listen()
 
@@ -173,4 +172,5 @@ if not is_closed:
     print("Now, you can safely run following command if this machine is idle:")
     print(f"sudo bash -c 'echo \"{start}-{end}\" > /var/lib/vastai_kaalia/host_port_range'")
 else:
-    print("CLOSED indicates that either port forwarding is configured incorrectly when using a router, or this machine's firewall is blocking access to the port.")
+    print("CLOSED usually indicates that either port forwarding is configured incorrectly when using a router, or this machine's firewall is blocking access to the port.")
+    print("Exception : If docker is mapping specific port but your client isn't actually using that port, then the port cannot be tested, and the port can only be tested after the client deletes the instance.")
