@@ -45,7 +45,7 @@ def get_external_ipv4():
     if is_ipv4(response_html.strip()):
         return response_html.strip()
     else:
-        print_error(f"get_external_ipv4: {api_get_external_ipv4} returned invalid ipv4 address.")
+        print(f"get_external_ipv4: {api_get_external_ipv4} returned invalid ipv4 address.")
         exit(1)
 
 
@@ -79,7 +79,7 @@ def test_tcp_port(ip, port):
             try:
                 with urllib.request.urlopen(req, data=data, timeout=10) as response:
                     if response.code != 200:
-                        print_error(f"test_tcp_port: {api_connect_to_tcp_port} returned unexpected code.")
+                        print(f"test_tcp_port: {api_connect_to_tcp_port} returned unexpected code.")
                         exit(1)
 
                     response_dict = json.load(response)
@@ -89,7 +89,7 @@ def test_tcp_port(ip, port):
                 else:
                     return False
             except (urllib.error.URLError, urllib.error.HTTPError):
-                print_error(f"test_tcp_port: {api_connect_to_tcp_port} appears to be unavailable.")
+                print(f"test_tcp_port: {api_connect_to_tcp_port} appears to be unavailable.")
                 exit(1)
             finally:
                 sock.close()
@@ -107,7 +107,7 @@ def test_tcp_port(ip, port):
         try:
             with urllib.request.urlopen(req, data=data, timeout=10) as response:
                 if response.code != 200:
-                    print_error(f"test_tcp_port: {api_connect_to_tcp_port} returned unexpected code.")
+                    print(f"test_tcp_port: {api_connect_to_tcp_port} returned unexpected code.")
                     exit(1)
 
                 response_dict = json.load(response)
@@ -115,7 +115,7 @@ def test_tcp_port(ip, port):
             if 'true' in json.dumps(response_dict):
                 return True
         except (urllib.error.URLError, urllib.error.HTTPError):
-            print_error(f"test_tcp_port: {api_connect_to_tcp_port} appears to be unavailable.")
+            print(f"test_tcp_port: {api_connect_to_tcp_port} appears to be unavailable.")
             exit(1)
 
         print("Alternative testing method should be used. This will add temporary iptables rule and revert iptables to original state after the test is complete.")
@@ -141,6 +141,9 @@ def test_tcp_port(ip, port):
             sock.listen()
         except OSError:
             print("Alternative testing method requires that port 65535 is not in use.")
+            subprocess.run(
+                    shlex.split(f"sudo iptables -t nat -D PREROUTING -p tcp --dport {port} -j REDIRECT --to-port 65535"),
+                    stdout=subprocess.DEVNULL)
             exit(1)
 
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -157,7 +160,7 @@ def test_tcp_port(ip, port):
             try:
                 with urllib.request.urlopen(req, data=data, timeout=10) as response:
                     if response.code != 200:
-                        print_error(f"test_tcp_port: {api_connect_to_tcp_port} returned unexpected code.")
+                        print(f"test_tcp_port: {api_connect_to_tcp_port} returned unexpected code.")
                         exit(1)
 
                     response_dict = json.load(response)
@@ -167,7 +170,7 @@ def test_tcp_port(ip, port):
                 else:
                     return False
             except (urllib.error.URLError, urllib.error.HTTPError):
-                print_error(f"test_tcp_port: {api_connect_to_tcp_port} appears to be unavailable.")
+                print(f"test_tcp_port: {api_connect_to_tcp_port} appears to be unavailable.")
                 exit(1)
             finally:
                 sock.close()
