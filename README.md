@@ -35,5 +35,5 @@ For Linux beginners, using the 'nc' command to test port range can be challengin
 Check all ports within the specified range.
 ```
 wget https://raw.githubusercontent.com/Bo26fhmC5M/vast-tools/main/test-all-ports.py
-python3 test-all-ports.py
+sudo python3 test-all-ports.py
 ```
