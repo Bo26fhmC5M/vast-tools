@@ -32,12 +32,7 @@ sudo bash clean-vastai-storage.sh
 # How to check if port range is open
 For Linux beginners, using the 'nc' command to test port range can be challenging. This script provides a simple way to check if port range is open.
 
-1) Check one random port and both end ports within the specified range. (Fast)
-```
-wget https://raw.githubusercontent.com/Bo26fhmC5M/vast-tools/main/test-ports.py
-python3 test-ports.py
-```
-2) Check all ports within the specified range. (Slow)
+Check all ports within the specified range.
 ```
 wget https://raw.githubusercontent.com/Bo26fhmC5M/vast-tools/main/test-all-ports.py
 python3 test-all-ports.py
