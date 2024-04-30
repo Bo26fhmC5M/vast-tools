@@ -49,12 +49,25 @@ def get_external_ipv4():
         exit(1)
 
 
+def get_default_iface_name():
+    with open("/proc/net/route") as f:
+        for line in f.readlines():
+            try:
+                iface, dest, _, flags, _, _, _, _, _, _, _, =  line.strip().split()
+                if dest != '00000000' or not int(flags, 16) & 2:
+                    continue
+                return iface
+            except:
+                continue
+
+
 def test_tcp_port(ip, port):
     def sock_accept(sock):
         try:
             con, addr = sock.accept()
             con.close()
         except socket.timeout:
+            sock.close()
             pass
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -124,8 +137,10 @@ def test_tcp_port(ip, port):
         if answer.strip().upper() != 'Y':
             exit(1)
 
+        default_iface = get_default_iface_name()
+
         proc = subprocess.run(
-            shlex.split(f"sudo iptables -t nat -I PREROUTING -p tcp --dport {port} -j REDIRECT --to-port 65535"),
+            shlex.split(f"sudo iptables -t nat -I PREROUTING -i {default_iface} -p tcp --dport {port} -j REDIRECT --to-port 65535"),
             stdout=subprocess.DEVNULL)
 
         if proc.returncode != 0:
@@ -140,9 +155,9 @@ def test_tcp_port(ip, port):
             sock.bind(('0.0.0.0', 65535))
             sock.listen()
         except OSError:
-            print("Alternative testing method requires that port 65535 is not in use.")
+            print("Port 65535 should be not in use for alternative testing method.")
             subprocess.run(
-                    shlex.split(f"sudo iptables -t nat -D PREROUTING -p tcp --dport {port} -j REDIRECT --to-port 65535"),
+                    shlex.split(f"sudo iptables -t nat -D PREROUTING -i {default_iface} -p tcp --dport {port} -j REDIRECT --to-port 65535"),
                     stdout=subprocess.DEVNULL)
             exit(1)
 
@@ -176,43 +191,44 @@ def test_tcp_port(ip, port):
                 future.result()
                 sock.close()
                 subprocess.run(
-                    shlex.split(f"sudo iptables -t nat -D PREROUTING -p tcp --dport {port} -j REDIRECT --to-port 65535"),
+                    shlex.split(f"sudo iptables -t nat -D PREROUTING -i {default_iface} -p tcp --dport {port} -j REDIRECT --to-port 65535"),
                     stdout=subprocess.DEVNULL)
 
 
-start = input("Enter start port: ")
-if not start.isdigit() or not (0 <= int(start) <= 65535):
-    print("Invalid start port.")
-    exit(1)
+if __name__ == '__main__':
+    start = input("Enter start port: ")
+    if not start.isdigit() or not (0 <= int(start) <= 65535):
+        print("Invalid start port.")
+        exit(1)
 
-end = input("Enter end port: ")
-if not end.isdigit() or not (0 <= int(end) <= 65535):
-    print("Invalid end port.")
-    exit(1)
+    end = input("Enter end port: ")
+    if not end.isdigit() or not (0 <= int(end) <= 65535):
+        print("Invalid end port.")
+        exit(1)
 
-start = int(start)
-end = int(end)
+    start = int(start)
+    end = int(end)
 
-if start >= end:
-    print("End port must be larger than start port.")
-    exit(1)
+    if start >= end:
+        print("End port must be larger than start port.")
+        exit(1)
 
-external_ipv4 = get_external_ipv4()
-print(f"Your public ipv4 address is {external_ipv4}")
+    external_ipv4 = get_external_ipv4()
+    print(f"Your public ipv4 address is {external_ipv4}")
 
-is_closed = False
+    is_closed = False
 
-for port in range(start, end + 1):
-    if test_tcp_port(external_ipv4, port):
-        print(f"Port {port} is OPEN.")
+    for port in range(start, end + 1):
+        if test_tcp_port(external_ipv4, port):
+            print(f"Port {port} is OPEN.")
+        else:
+            is_closed = True
+            print(f"Port {port} is CLOSED.")
+            break
+        time.sleep(0.5)
+
+    if not is_closed:
+        print("Now, you can safely run following command if this machine is idle:")
+        print(f"sudo bash -c 'echo \"{start}-{end}\" > /var/lib/vastai_kaalia/host_port_range'")
     else:
-        is_closed = True
-        print(f"Port {port} is CLOSED.")
-        break
-    time.sleep(0.5)
-
-if not is_closed:
-    print("Now, you can safely run following command if this machine is idle:")
-    print(f"sudo bash -c 'echo \"{start}-{end}\" > /var/lib/vastai_kaalia/host_port_range'")
-else:
-    print("CLOSED usually indicates that either port forwarding is configured incorrectly when using a router, or this machine's firewall is blocking access to the port.")
+        print("CLOSED usually indicates that either port forwarding is configured incorrectly when using a router, or this machine's firewall is blocking access to the port.")
