@@ -173,6 +173,7 @@ def test_tcp_port(ip, port):
                 print(f"test_tcp_port: {api_connect_to_tcp_port} appears to be unavailable.")
                 exit(1)
             finally:
+                future.result()
                 sock.close()
                 subprocess.run(
                     shlex.split(f"sudo iptables -t nat -D PREROUTING -p tcp --dport {port} -j REDIRECT --to-port 65535"),
