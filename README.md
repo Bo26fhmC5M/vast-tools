@@ -7,6 +7,11 @@ Hosts often make mistakes when applying nvml fixes manually. This fix automatica
 wget https://raw.githubusercontent.com/Bo26fhmC5M/vast-tools/main/fix-nvml-error.py
 sudo python3 fix-nvml-error.py
 ```
+v2 version provides an option to prevent fix for nvml error from being removed later.
+```
+wget https://raw.githubusercontent.com/Bo26fhmC5M/vast-tools/main/fix-nvml-error-v2.py
+sudo python3 fix-nvml-error-v2.py
+```
 
 # How to install the packages required by vastai when using Ubuntu 22 minimized
 If you install a minimized version of Ubuntu 22, mainboard name, disk name, and disk speed may be displayed incorrectly in the vastai dashboard due to missing packages.
