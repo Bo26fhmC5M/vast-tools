@@ -24,8 +24,6 @@ ExecStop=/bin/bash -c "/bin/kill -2 $MAINPID && /usr/local/sbin/set_fan_speed au
 WantedBy=multi-user.target
 EOF
 
-echo "$FILE_GPUFAN_CONTROLLER_SERVICE" | sudo tee /etc/systemd/system/gpufan-controller.service > /dev/null
-
 sudo systemctl enable gpufan-controller.service
 sudo systemctl start gpufan-controller.service
 sudo systemctl status gpufan-controller.service
